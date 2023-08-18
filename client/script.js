@@ -1,4 +1,4 @@
-import { setMyPlayerNo, updateGameState } from "./game.js";
+import { gameSkipOnce, setMyPlayerNo, updateGameState } from "./game.js";
 
 const SERVER = "http://localhost:3000";
 const socket = io(SERVER);
@@ -32,6 +32,7 @@ socket.on("init", (playerNo) => handleInit(playerNo));
 socket.on("updateState", (state) => handleUpdateState(state));
 socket.on("disconnect", (reason) => handleDisconnect(reason));
 socket.on("gameOver", (winner) => handleGameOver(winner));
+socket.on("skipCurrentPlayer", () => handleSkipCurrentPlayer());
 
 joinRoomButton.addEventListener("click", (event) => handleJoinRoom());
 createRoomButton.addEventListener("click", (event) => handleCreateRoom());
@@ -103,6 +104,11 @@ function handleGameOver(winner) {
     }
 }
 
+function handleSkipCurrentPlayer() {
+    console.log("ToDo: handleSkipCurrent");
+    gameSkipOnce();
+}
+
 function alertStatus(msg, cb) {
     const div = document.getElementById("spanStatus");
     div.innerText = msg;
@@ -127,7 +133,13 @@ function putMassCompleted() {
     }, 1000);
 }
 
+function skipCurrentPlayer() {
+    console.log("skipCurrentPlayer");
+    socket.emit("skipCurrentPlayer");
+}
+
 export {
     putMass,
     putMassCompleted,
+    skipCurrentPlayer,
 }

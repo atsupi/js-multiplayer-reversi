@@ -5,7 +5,7 @@
   "main": "main.js",
   "scripts": {
     "start": "node index.js",
-    "dev": "live-server index.html --port=5500",
+    "dev": "live-server --port=5500"
   },
   "repository": {
     "type": "git",

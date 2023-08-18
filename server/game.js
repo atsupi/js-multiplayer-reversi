@@ -91,6 +91,12 @@ const gamePutMassCompleted = () => {
     console.log("gamePutMassCompleted", gameState);
 }
 
+const gameSkipCurrentPlayer = () => {
+    gameState.currentPlayer = 3 - gameState.currentPlayer;
+    gameState.waitingResponse = true;
+    console.log("gameSkipCurrentPlayer: new=", gameState.currentPlayer);
+}
+
 const gameWinner = (winner) => {
     const newParam = {
         playerNo: 0,
@@ -130,4 +136,5 @@ export {
     startGame,
     gamePutMass,
     gamePutMassCompleted,
+    gameSkipCurrentPlayer,
 }

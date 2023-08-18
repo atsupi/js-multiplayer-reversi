@@ -1,4 +1,4 @@
-import { gamePutMassCompleted, startGame } from "./game.js";
+import { gamePutMassCompleted, gameSkipCurrentPlayer, startGame } from "./game.js";
 import { gamePutMass } from "./game.js";
 import { Server } from "socket.io";
 
@@ -17,6 +17,14 @@ io.on("connection", (socket) => {
     socket.on("disconnect", (reason) => handleDisconnect(reason));
     socket.on("putMass", (pos) => handlePutMass(pos));
     socket.on("putMassCompleted", () => handlePutMassCompleted());
+    socket.on("skipCurrentPlayer", () => handleSkipCurrentPlayer());
+
+    function handleSkipCurrentPlayer() {
+        gameSkipCurrentPlayer();
+        const roomId = clientRooms[socket.id];
+        console.log("handleSkipCurrentPlayer", roomId);
+        socket.to(roomId).emit("skipCurrentPlayer");
+    }
 
     function handlePutMassCompleted() {
         gamePutMassCompleted();

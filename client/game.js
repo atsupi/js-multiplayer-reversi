@@ -5,13 +5,14 @@
 *********************************************************/
 "use strict"
 
-import { putMass, putMassCompleted } from "./script.js";
+import { putMass, putMassCompleted, skipCurrentPlayer } from "./script.js";
 
 const D_WIDTH = 480;
 const D_HEIGHT = 320;
 
 let gameState = null;
 let myPlayerNo = null;
+let skipOnce = false;
 
 const map = [
     [3, 3, 3, 3, 3, 3, 3, 3, 3, 3],
@@ -118,6 +119,9 @@ class MyScene2 extends Phaser.Scene {
         this.textSkip = this.add.text(354, 276, "Skip").setFontSize(24).setColor('#aaf').setInteractive();
         this.textSkip.on("pointerdown", () => {
             this.turn = 1 - this.turn;
+            if (gameState && gameState.currentPlayer === myPlayerNo) {
+                skipCurrentPlayer();
+            }
         }, this);
 
         const createCallback = (sprite) => {
@@ -139,6 +143,10 @@ class MyScene2 extends Phaser.Scene {
     }
 
     update = () => {
+        if (skipOnce) {
+            this.turn = 1 - this.turn;
+            skipOnce = false;
+        }
         this.graphics.fillStyle(0x123456);
         this.graphics.fillRect(320, 0, 480, 320);
         this.textBlack.setText("Black:" + this.numBlack);
@@ -337,7 +345,12 @@ function setMyPlayerNo(playerNo) {
     myPlayerNo = playerNo; 
 }
 
+function gameSkipOnce() {
+    skipOnce = true;
+}
+
 export {
     updateGameState,
     setMyPlayerNo,
+    gameSkipOnce,
 }
